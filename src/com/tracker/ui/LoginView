@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="10" stylesheets="@styles.css" 
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.tracker.ui.LoginController">
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+
+    <Label text="Offline Inventory Tracker" style="-fx-font-size: 20pt; -fx-text-fill: #1a1a1a;">
+        <font>
+            <Font name="System Bold" size="18.0" />
+        </font>
+    </Label>
+    <Label text="Login" style="-fx-font-size: 14pt; -fx-text-fill: #333333;" />
+
+    <Label text="Username" />
+    <TextField fx:id="usernameField" promptText="admin or staff1" maxWidth="250" />
+
+    <Label text="Password" />
+    <PasswordField fx:id="passwordField" promptText="admin123 or staff123" maxWidth="250" />
+
+    <Button text="Login" onAction="#handleLoginButton" maxWidth="250" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;" />
+
+    <Label fx:id="messageLabel" text="" style="-fx-text-fill: red; -fx-font-weight: bold;" />
+    
+</VBox>
