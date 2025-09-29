@@ -26,7 +26,37 @@ public class AuthenticationService {
             userDAO.loadUsers(); // Ensure users are loaded/bootstrapped on startup
         }
     }
+    /**
+     * Allows the ShopKeeper to create a new Staff or ShopKeeper account.
+     * This satisfies the user management requirement.
+     * @param creatingUser The user performing the action (must be ShopKeeper).
+     * @param newUsername The username for the new account.
+     * @param newPassword The password for the new account.
+     * @param role The role to assign ("STAFF" or "SHOPKEEPER").
+     * @return True if the user was successfully added.
+     */
+    public boolean addUser(User creatingUser, String newUsername, String newPassword, String role) {
+        // 1. RBAC Check: Only a logged-in ShopKeeper can create new users.
+        if (creatingUser == null || !creatingUser.getRole().equals("SHOPKEEPER")) {
+            System.err.println("Access Denied: Only ShopKeeper can add new users.");
+            return false;
+        }
 
+        User newUser;
+        if (role.equalsIgnoreCase("STAFF")) {
+            newUser = new Staff(newUsername, newPassword);
+        } else if (role.equalsIgnoreCase("SHOPKEEPER")) {
+            newUser = new ShopKeeper(newUsername, newPassword);
+        } else {
+            System.err.println("Error: Invalid role specified.");
+            return false;
+        }
+
+        // 2. Persist the new user
+        userDAO.add(newUser);
+        System.out.println(creatingUser.getUsername() + " successfully added new user: " + newUsername + " as " + role);
+        return true;
+    }
     /**
      * Executes the login process as per the User Login Sequence Diagram.
      * @return The authenticated User object, or null if login fails.

@@ -45,6 +45,22 @@ public class UserDAO {
         FileStorageUtil.saveData(this.users, FILE_PATH);
     }
     
+    public void add(User newUser) {
+        // Ensure data is loaded
+        if (this.users.isEmpty()) {
+            loadUsers();
+        }
+        
+        // Simple uniqueness check (can be expanded)
+        if (users.stream().anyMatch(u -> u.getUsername().equals(newUser.getUsername()))) {
+            System.err.println("Error: Username already exists.");
+            return;
+        }
+        
+        this.users.add(newUser);
+        saveUsers();
+    }
+    
     /**
      * Corresponds to 'validateCredentials' in the Sequence Diagram.
      */
