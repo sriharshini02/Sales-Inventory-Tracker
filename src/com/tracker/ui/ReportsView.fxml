@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.ui.ReportsController">
+   <Label text="Generate Reports (ShopKeeper)">
+      <font>
+         <Font name="System Bold" size="20.0" />
+      </font>
+   </Label>
+   
+   <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-border-color: #ccc; -fx-padding: 10;">
+      <Label text="From:" />
+      <DatePicker fx:id="startDatePicker" />
+      <Label text="To:" />
+      <DatePicker fx:id="endDatePicker" />
+      
+      <Button mnemonicParsing="false" onAction="#handleProfitLossReport" text="Generate P&amp;L" style="-fx-background-color: #009688; -fx-text-fill: white;" />
+      
+      <Label text="Top N:" />
+      <TextField fx:id="topNField" prefWidth="50.0" promptText="5" />
+      <Button mnemonicParsing="false" onAction="#handleBestSellingReport" text="Generate Best Selling" style="-fx-background-color: #8BC34A; -fx-text-fill: black;" />
+      
+      <Button mnemonicParsing="false" onAction="#handleExportReport" text="Export" style="-fx-background-color: #FFC107; -fx-text-fill: black;" />
+   </HBox>
+   
+   <Label text="Report Output:" style="-fx-font-weight: bold;" />
+   <TextArea fx:id="reportArea" editable="false" prefHeight="450.0" VBox.vgrow="ALWAYS" />
+</VBox>
