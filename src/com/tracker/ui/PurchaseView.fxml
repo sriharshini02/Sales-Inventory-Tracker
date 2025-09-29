@@ -15,10 +15,10 @@
       </font>
    </Label>
    <GridPane hgap="10.0" vgap="10.0">
-      <Label text="Product ID:" GridPane.rowIndex="0" />
-      <TextField fx:id="purchaseIDField" promptText="Enter existing product ID" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-      
-      <Label text="Quantity Received:" GridPane.rowIndex="1" />
+      <Label text="Product Name:" GridPane.rowIndex="0" /> 
+	  <TextField fx:id="purchaseNameField" promptText="Enter existing product name" GridPane.columnIndex="1" GridPane.rowIndex="0" /> 
+	  
+	  <Label text="Quantity Received:" GridPane.rowIndex="1" />  <TextField fx:id="purchaseNameField" promptText="Enter existing product name" GridPane.columnIndex="1" GridPane.rowIndex="0" /> <Label text="Quantity Received:" GridPane.rowIndex="1" /> <TextField fx:id="quantityField" promptText="e.g., 100" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <TextField fx:id="quantityField" promptText="e.g., 100" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       
       <Label text="New Cost Price (Per Unit):" GridPane.rowIndex="2" />

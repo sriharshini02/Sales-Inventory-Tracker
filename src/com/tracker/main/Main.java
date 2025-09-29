@@ -1,18 +1,18 @@
 package com.tracker.main;
 
-import java.io.IOException;
-
-import javax.ws.rs.core.Application;
-
+import javafx.application.Application; // Correct base class for JavaFX
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class Main extends Application {
 
     private static Stage primaryStage;
 
+    @Override
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
         primaryStage.setTitle("Sales & Inventory Tracker (Offline)");
@@ -25,7 +25,7 @@ public class Main extends Application {
      * Helper method to load and show the Login View.
      */
     public static void showLoginView() throws IOException {
-        // We will create the LoginView.fxml in the next step
+        // NOTE: Using getClass().getResource() for robust path lookup
         Parent root = FXMLLoader.load(Main.class.getResource("/com/tracker/ui/LoginView.fxml"));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
@@ -36,19 +36,16 @@ public class Main extends Application {
      * Helper method to load and show the main application interface.
      */
     public static void showMainView() throws IOException {
-        // We will create the MainView.fxml later
         Parent root = FXMLLoader.load(Main.class.getResource("/com/tracker/ui/MainView.fxml"));
         Scene scene = new Scene(root, 1000, 700); // Set a standard size for the main app
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+    /**
+     * Standard main method that delegates control to the JavaFX Application class.
+     */
     public static void main(String[] args) {
-        launch(args);
+        launch(args); // This static method is inherited from javafx.application.Application
     }
-
-	private static void launch(String[] args) {
-		// TODO Auto-generated method stub
-		
-	}
 }

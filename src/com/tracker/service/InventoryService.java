@@ -98,4 +98,14 @@ public class InventoryService {
     public void persistChanges() {
         productDAO.saveProducts();
     }
+    public Optional<Product> getProductByName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return Optional.empty();
+        }
+        
+        // FIX: Call the non-static method on the instance variable 'productDAO'
+        return this.productDAO.getAllProducts().stream() 
+                .filter(p -> p.getName().trim().equalsIgnoreCase(name.trim()))
+                .findFirst();
+    }
 }
