@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+            prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" 
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.ui.MainController">
+   
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="40.0" style="-fx-background-color: #3f51b5; -fx-padding: 10;" spacing="20.0" BorderPane.alignment="CENTER">
+         <Label text="Retail Inventory Tracker" textFill="WHITE">
+            <font>
+               <Font name="System Bold" size="18.0" />
+            </font>
+         </Label>
+         <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS" spacing="15.0">
+             <Label fx:id="userLabel" text="User: [Role]" textFill="WHITE" />
+             <Button mnemonicParsing="false" onAction="#handleLogout" text="Logout" style="-fx-background-color: #ff5722; -fx-text-fill: white;" />
+         </HBox>
+      </HBox>
+   </top>
+   
+   <left>
+      <VBox fx:id="sideBar" prefWidth="200.0" style="-fx-background-color: #f0f0f0; -fx-padding: 15;" spacing="10.0" BorderPane.alignment="TOP_LEFT">
+         <Label text="Navigation" style="-fx-font-weight: bold; -fx-font-size: 14pt;" />
+         
+         <Button mnemonicParsing="false" onAction="#showInventoryView" prefWidth="200.0" text="View Inventory" style="-fx-alignment: center-left;" />
+         <Button mnemonicParsing="false" onAction="#showSalesRegisterView" prefWidth="200.0" text="Record Sale" style="-fx-alignment: center-left;" />
+         
+         <Label text="ShopKeeper Tools" fx:id="shopKeeperHeader" style="-fx-font-weight: bold; -fx-padding: 10 0 0 0;" />
+         
+         <Button fx:id="productManagementBtn" mnemonicParsing="false" onAction="#showProductManagementView" prefWidth="200.0" text="Manage Products" style="-fx-alignment: center-left;" />
+         <Button fx:id="recordPurchaseBtn" mnemonicParsing="false" onAction="#showPurchaseView" prefWidth="200.0" text="Record Purchase" style="-fx-alignment: center-left;" />
+         <Button fx:id="salesHistoryBtn" mnemonicParsing="false" onAction="#showSalesHistoryView" prefWidth="200.0" text="View Sales History" style="-fx-alignment: center-left;" />
+         <Button fx:id="reportsBtn" mnemonicParsing="false" onAction="#showReportsView" prefWidth="200.0" text="Generate Reports" style="-fx-alignment: center-left;" />
+         
+      </VBox>
+   </left>
+   
+   <center>
+      <VBox fx:id="contentArea" style="-fx-padding: 20;" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

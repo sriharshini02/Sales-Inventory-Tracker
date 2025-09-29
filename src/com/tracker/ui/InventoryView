@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.TableColumn?>
+
+<VBox alignment="TOP_LEFT" spacing="10.0" 
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.tracker.ui.InventoryController">
+   
+   <Label text="Current Inventory Stock">
+      <font>
+         <Font name="System Bold" size="20.0" />
+      </font>
+   </Label>
+   <Label text="Displays real-time stock quantities for all products." />
+
+    <TableView fx:id="inventoryTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idCol" prefWidth="75.0" text="Product ID" />
+            <TableColumn fx:id="nameCol" prefWidth="150.0" text="Name" />
+            <TableColumn fx:id="categoryCol" prefWidth="100.0" text="Category" />
+            <TableColumn fx:id="costCol" prefWidth="80.0" text="Cost Price" />
+            <TableColumn fx:id="sellCol" prefWidth="80.0" text="Selling Price" />
+            <TableColumn fx:id="stockCol" prefWidth="75.0" text="Stock" />
+        </columns>
+         <columnResizePolicy>
+             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+    </TableView>
+
+</VBox>
