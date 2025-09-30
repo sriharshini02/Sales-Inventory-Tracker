@@ -1,10 +1,12 @@
 package com.tracker.service;
 
 import com.tracker.dao.ProductDAO;
+import java.util.ArrayList;
 import com.tracker.model.Product;
 import com.tracker.model.User;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Executes the business logic for Add/Update/Remove Product and stock viewing.
@@ -20,38 +22,78 @@ public class InventoryService {
     
     // --- Use Case: Add Product ---
     // Implements the logic from the "Add Product" sequence diagram
-    public boolean addOrUpdateProduct(User user, Product newProduct, int initialStock) {
-        if (user == null || !user.getRole().equals("SHOPKEEPER")) {
-            System.out.println("Access Denied: Only ShopKeeper can add/update products.");
-            return false;
-        }
+ // In com.tracker.service.InventoryService.java
 
-        // 1. checkIfExists (via DAO)
-        Optional<Product> existingProductOpt = productDAO.findById(newProduct.getProductID());
+ // ... existing code ...
 
-        if (existingProductOpt.isPresent()) {
-            // ALT [product exists] -> updateStock
-            Product existingProduct = existingProductOpt.get();
-            System.out.println("Product exists. Updating stock and details.");
+ /**
+  * Handles the 'Add/Update Product' use case.
+  */
+ // In com.tracker.service.InventoryService.java
+
+    public boolean addOrUpdateProduct(User user, Product newProduct, int stockChange) {
             
-            // Update mutable details
-            existingProduct.setName(newProduct.getName());
-            existingProduct.setCategory(newProduct.getCategory());
-            existingProduct.setCostPrice(newProduct.getCostPrice());
-            existingProduct.setSellingPrice(newProduct.getSellingPrice());
+        // 1. Get existing product by ID
+        Optional<Product> existingProductById = productDAO.getProductById(newProduct.getProductID());
+        
+        // --- COMMON NAME UNIQUENESS CHECK ---
+        
+        // Check if a product with the new name already exists in the system.
+        Optional<Product> existingProductByName = productDAO.getProductByName(newProduct.getName());
+
+        if (existingProductByName.isPresent()) {
+            Product conflictProduct = existingProductByName.get();
             
-            // Update stock quantity (This assumes the flow is for receiving new stock/initial stock)
-            existingProduct.updateStock(initialStock); 
-            
-        } else {
-            // ALT [new product] -> insertNewProduct
-            System.out.println("New product. Adding to inventory.");
-            newProduct.updateStock(initialStock); // Set initial stock
-            productDAO.add(newProduct);
+            // This is the core fix: Allow the operation ONLY if the name conflict 
+            // is with the product being updated itself.
+            boolean isSelfConflict = existingProductById.isPresent() 
+                                   && conflictProduct.getProductID().equals(newProduct.getProductID());
+
+            if (!isSelfConflict) {
+                // Error: Name conflict with a DIFFERENT product ID. Block the operation.
+                System.err.println("Error: A product with the name '" + newProduct.getName() + "' already exists (ID: " + conflictProduct.getProductID() + ").");
+                return false;
+            }
+            // If isSelfConflict is true, it means the user is updating product 'A' and keeping name 'X', which is fine.
         }
         
-        productDAO.saveProducts();
-        return true;
+        // 2. Logic for NEW PRODUCT (ID is new)
+        if (existingProductById.isEmpty()) { 
+            
+            // If we reached here, the name is unique (checked above). Insert it.
+            try {
+                // Set the initial stock from the form, if the ID is new
+            	newProduct.setStockQuantity(stockChange); 
+                
+                productDAO.insertNewProduct(newProduct); 
+                return true;
+            } catch (Exception e) {
+                System.err.println("Error inserting new product: " + e.getMessage());
+                return false;
+            }
+        } 
+        
+        // 3. Logic for EXISTING PRODUCT (UPDATE)
+        else {
+            Product existingProduct = existingProductById.get();
+            
+            try {
+                // A) Update stock: Use the explicit 'stockChange' amount provided.
+                existingProduct.updateStock(stockChange); 
+                
+                // B) Update price and name/category details from the newProduct object
+                existingProduct.updatePrice(newProduct.getCostPrice(), newProduct.getSellingPrice());
+                existingProduct.setName(newProduct.getName());        // Assume setter exists
+                existingProduct.setCategory(newProduct.getCategory()); // Assume setter exists
+
+                // C) Persist changes
+                productDAO.saveProductChanges(existingProduct); 
+                return true;
+            } catch (Exception e) {
+                System.err.println("Error updating product: " + e.getMessage());
+                return false;
+            }
+        }
     }
 
     // --- Use Case: Remove Product ---
@@ -107,5 +149,30 @@ public class InventoryService {
         return this.productDAO.getAllProducts().stream() 
                 .filter(p -> p.getName().trim().equalsIgnoreCase(name.trim()))
                 .findFirst();
+    }
+    
+    /**
+     * Searches the inventory for products matching the given name query.
+     * @param query The partial or full product name to search for.
+     * @return A list of matching Product objects.
+     */
+    public List<Product> searchProductsByName(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return new ArrayList<>(); // Return empty list if no query
+        }
+        
+        String lowerCaseQuery = query.trim().toLowerCase();
+        
+        // 1. Get all products (using the DAO's method)
+        List<Product> allProducts = productDAO.getAllProducts(); 
+        
+        // 2. Filter the list by name
+        return allProducts.stream()
+            .filter(p -> p.getName().toLowerCase().contains(lowerCaseQuery))
+            .collect(Collectors.toList());
+    }
+    
+    public List<Product> getAllProducts() {
+        return productDAO.getAllProducts();
     }
 }

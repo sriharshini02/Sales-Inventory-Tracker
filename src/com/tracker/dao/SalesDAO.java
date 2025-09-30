@@ -34,8 +34,17 @@ public class SalesDAO {
     // Utility for report filtering
     public List<SalesTransaction> getTransactionsByDateRange(java.time.LocalDate startDate, java.time.LocalDate endDate) {
         return transactions.stream()
-                .filter(t -> !t.getDateTime().toLocalDate().isBefore(startDate) && 
-                             !t.getDateTime().toLocalDate().isAfter(endDate))
-                .collect(Collectors.toList());
+        		.filter(t -> {
+        		    // Check if dateTime is null before calling any method on it
+        		    if (t.getDateTime() == null) {
+        		        // You can log a warning here if you like, but we must skip this record.
+        		        return false; 
+        		    }
+        		    
+        		    // Now safely access the date for filtering
+        		    return t.getDateTime().toLocalDate().isAfter(startDate.minusDays(1)) && 
+        		           t.getDateTime().toLocalDate().isBefore(endDate.plusDays(1));
+        		})
+        		.collect(Collectors.toList());
     }
 }

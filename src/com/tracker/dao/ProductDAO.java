@@ -15,7 +15,7 @@ public class ProductDAO {
 
     private static final String FILE_PATH = "data/products.dat";
     private List<Product> products;
-
+    private static final String PRODUCT_FILE = "products.dat"; 
     public ProductDAO() {
         this.products = loadProducts();
         
@@ -43,6 +43,37 @@ public class ProductDAO {
                 .filter(p -> p.getProductID().equalsIgnoreCase(productId))
                 .findFirst();
     }
+    /**
+     * Maps to productDAO.insertNewProduct(newProduct) in the Service Layer.
+     * Adds a new product to the list and saves changes.
+     */
+    public void insertNewProduct(Product product) {
+        this.products.add(product);
+        saveProducts(); // Persist the change
+    }
+
+    /**
+     * Maps to productDAO.saveProductChanges(existingProduct) in the Service Layer.
+     * Replaces the old product object with the updated one and saves changes.
+     */
+    public void saveProductChanges(Product updatedProduct) {
+        // 1. Remove the old version of the product using its ID
+        this.products.removeIf(p -> p.getProductID().equals(updatedProduct.getProductID()));
+        
+        // 2. Add the updated version
+        this.products.add(updatedProduct);
+        
+        // 3. Persist the change
+        saveProducts(); 
+    }
+    
+    private List<Product> loadProducts() {
+        // Assuming FileStorageUtil handles deserialization from FILE_PATH
+        // We ensure the list is always fresh before searching/updating
+        List<Product> loadedList = FileStorageUtil.loadData(FILE_PATH);
+        return loadedList != null ? loadedList : new ArrayList<>();
+    }
+    
     
     // Corresponds to 'insertNewProduct' in Sequence Diagram
     public void add(Product product) {
@@ -55,10 +86,7 @@ public class ProductDAO {
         this.products.removeIf(p -> p.getProductID().equalsIgnoreCase(productId));
         saveProducts();
     }
-    private List<Product> loadProducts() {
-        // Assuming FileStorageUtil handles deserialization
-        return FileStorageUtil.loadData(FILE_PATH);
-    }
+    
     public List<Product> getAll() {
         // Ensure we work with the latest list
         this.products = loadProducts(); 
@@ -70,8 +98,19 @@ public class ProductDAO {
         return new ArrayList<>(products);
     }
     public Optional<Product> getProductById(String productID) {
-        return getAllProducts().stream()
+        // Ensure the in-memory list is up-to-date before searching
+        this.products = loadProducts(); 
+        
+        return this.products.stream()
                 .filter(p -> p.getProductID().equals(productID))
                 .findFirst();
+    }
+    public Optional<Product> getProductByName(String name) {
+        // Rely on the in-memory list 'this.products' which should be updated 
+        // by insertNewProduct and saveProductChanges.
+        
+        return this.products.stream() // Use 'this.products'
+            .filter(p -> p.getName().equalsIgnoreCase(name))
+            .findFirst();
     }
 }

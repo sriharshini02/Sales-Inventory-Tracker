@@ -51,4 +51,23 @@ public class Product implements Serializable {
     public void updateStock(int quantityChange) {
         this.stockQuantity += quantityChange;
     }
+    /**
+     * Updates the cost price and selling price of the product.
+     * This method is required by the InventoryService logic.
+     * * @param newCost The new cost price for the product.
+     * @param newSell The new selling price for the product.
+     */
+    public void updatePrice(double newCost, double newSell) {
+        if (newCost >= 0) {
+            this.costPrice = newCost;
+        }
+        if (newSell >= 0) {
+            this.sellingPrice = newSell;
+        }
+    }
+    
+
+    public void setStockQuantity(int newStock) {
+        this.stockQuantity = newStock;
+    }
 }

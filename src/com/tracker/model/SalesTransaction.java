@@ -23,6 +23,7 @@ public class SalesTransaction implements Serializable {
     public SalesTransaction(String transactionID, User user, String paymentMethod) {
         this.transactionID = transactionID;
         this.user = user; // Store the user
+        this.dateTime = java.time.LocalDateTime.now();
         this.paymentMethod = paymentMethod;
         this.timestamp = LocalDateTime.now(); // Set the timestamp upon creation
         this.sales = new ArrayList<>();
