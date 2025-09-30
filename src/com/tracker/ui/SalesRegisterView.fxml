@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="600.0" prefWidth="800.0" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tracker.ui.SalesController">
-   <Label text="Sales Register (Staff & ShopKeeper)">
+   <Label text="Sales Register (Staff &amp; ShopKeeper)">
       <font>
          <Font name="System Bold" size="20.0" />
       </font>
@@ -47,7 +47,7 @@
    </HBox>
    <HBox alignment="CENTER_RIGHT" spacing="15.0">
       <Label text="TOTAL AMOUNT:" style="-fx-font-weight: bold; -fx-font-size: 16pt;" />
-      <Label fx:id="totalLabel" text="$0.00" style="-fx-font-weight: bold; -fx-font-size: 16pt;" />
+      <Label fx:id="totalLabel" text="0.00" style="-fx-font-weight: bold; -fx-font-size: 16pt;" />
    </HBox>
    <HBox alignment="CENTER_RIGHT" spacing="10.0">
       <Label text="Payment Method:" />

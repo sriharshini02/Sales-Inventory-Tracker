@@ -31,7 +31,11 @@ public class SalesService {
             return "Access Denied: Only Staff and ShopKeeper can record sales.";
         }
 
-        SalesTransaction transaction = new SalesTransaction(UUID.randomUUID().toString(), paymentMethod);
+        SalesTransaction transaction = new SalesTransaction(
+                UUID.randomUUID().toString(), 
+                user, // Pass the active user
+                paymentMethod
+            );
         
         // 1. Pre-Check for Stock and existence
         for (SaleRequest item : items) {

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.time.format.DateTimeFormatter;
 /**
  * Represents a complete sales transaction.
  * Corresponds to the 'SalesTransaction' class in the diagram.
@@ -17,13 +17,15 @@ public class SalesTransaction implements Serializable {
     private String paymentMethod;
     private List<Sale> sales; // List<Sale> implements the 1..* relationship
     private double calculatedTotal;
-
-    public SalesTransaction(String transactionID, String paymentMethod) {
+    private final LocalDateTime timestamp; // Store as LocalDateTime
+    private final User user; // Store the user object
+    
+    public SalesTransaction(String transactionID, User user, String paymentMethod) {
         this.transactionID = transactionID;
-        this.dateTime = LocalDateTime.now();
+        this.user = user; // Store the user
         this.paymentMethod = paymentMethod;
+        this.timestamp = LocalDateTime.now(); // Set the timestamp upon creation
         this.sales = new ArrayList<>();
-        this.calculatedTotal = 0.0;
     }
 
     // Corresponds to addSale(Sale sale) in the diagram
@@ -45,6 +47,22 @@ public class SalesTransaction implements Serializable {
     public String getPaymentMethod() { return paymentMethod; }
     public List<Sale> getSales() { return sales; }
     public double getCalculatedTotal() { return calculatedTotal; }
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+    public String getFormattedTimestamp() {
+        // FIX: Check if timestamp is null before calling format()
+        if (this.timestamp == null) {
+            return "N/A (Legacy Data)"; 
+        }
+        
+        // NOTE: Ensure DateTimeFormatter is imported or fully qualified if needed
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm:ss");
+        return this.timestamp.format(formatter);
+    }
+    public User getUser() {
+        return user;
+    }
     
     // Utility for reporting
     public double getTotalCostOfGoodsSold() {
@@ -52,4 +70,5 @@ public class SalesTransaction implements Serializable {
                          .mapToDouble(Sale::getLineCost)
                          .sum();
     }
+    
 }
