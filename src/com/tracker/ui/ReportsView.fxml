@@ -22,6 +22,10 @@
       <Label text="To:" />
       <DatePicker fx:id="endDatePicker" />
       
+      <!-- New Span Input -->
+      <Label text="Span (Days):" />
+      <TextField fx:id="spanField" prefWidth="50.0" promptText="7" /> 
+      
       <Button mnemonicParsing="false" onAction="#handleProfitLossReport" text="Generate P&amp;L" style="-fx-background-color: #009688; -fx-text-fill: white;" />
       
       <Label text="Top N:" />

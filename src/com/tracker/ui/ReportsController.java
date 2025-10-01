@@ -15,6 +15,7 @@ public class ReportsController {
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
     @FXML private TextField topNField;
+    @FXML private TextField spanField;
     @FXML private TextArea reportArea;
 
     // Services needed
@@ -29,12 +30,13 @@ public class ReportsController {
         startDatePicker.setValue(LocalDate.now().minusMonths(1));
         endDatePicker.setValue(LocalDate.now());
         topNField.setText("5");
+        spanField.setText("7"); // Default span of 7 days
     }
 
     private void generateReport(String type) {
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
-        
+        int spanDays = 0;
         if (startDate == null || endDate == null || startDate.isAfter(endDate)) {
             reportArea.setText("Error: Please select valid start and end dates.");
             return;
@@ -44,13 +46,19 @@ public class ReportsController {
         
         try {
             if (type.equals("P&L")) {
+            	spanDays = Integer.parseInt(spanField.getText());
+                if (spanDays < 1) {
+                    reportArea.setText("Error: Span must be a positive number of days.");
+                    return;
+                }
                 lastGeneratedReport = reportService.generateProfitLossReport(
-                    AuthenticationService.getActiveUser(), startDate, endDate
+                    AuthenticationService.getActiveUser(), startDate, endDate, spanDays
                 );
             } else if (type.equals("BestSelling")) {
                 int topN = Integer.parseInt(topNField.getText());
+                spanDays = Integer.parseInt(spanField.getText());
                 lastGeneratedReport = reportService.generateBestSellingReport(
-                    AuthenticationService.getActiveUser(), startDate, endDate, topN
+                    AuthenticationService.getActiveUser(), startDate, endDate, topN, spanDays
                 );
             } else {
                 return;
