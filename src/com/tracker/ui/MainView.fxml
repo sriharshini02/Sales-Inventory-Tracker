@@ -40,6 +40,8 @@
          <Button fx:id="salesHistoryBtn" mnemonicParsing="false" onAction="#showSalesHistoryView" prefWidth="200.0" text="View Sales History" style="-fx-alignment: center-left;" />
          <Button fx:id="reportsBtn" mnemonicParsing="false" onAction="#showReportsView" prefWidth="200.0" text="Generate Reports" style="-fx-alignment: center-left;" />
          
+         <Button fx:id="staffManagementBtn" mnemonicParsing="false" onAction="#showStaffManagementView" prefWidth="200.0" text="Manage Staff" style="-fx-alignment: center-left; -fx-font-weight: bold; -fx-text-fill: #3f51b5;" />
+         
       </VBox>
    </left>
    

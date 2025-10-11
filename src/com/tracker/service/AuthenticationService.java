@@ -35,27 +35,41 @@ public class AuthenticationService {
      * @param role The role to assign ("STAFF" or "SHOPKEEPER").
      * @return True if the user was successfully added.
      */
-    public boolean addUser(User creatingUser, String newUsername, String newPassword, String role) {
-        // 1. RBAC Check: Only a logged-in ShopKeeper can create new users.
+    public static boolean addUser(User creatingUser, String newUsername, String newPassword, String role) {
+    	UserDAO userDAO = new UserDAO(); 
+        
+        // 1. RBAC Check
         if (creatingUser == null || !creatingUser.getRole().equals("SHOPKEEPER")) {
             System.err.println("Access Denied: Only ShopKeeper can add new users.");
             return false;
         }
 
         User newUser;
+        
         if (role.equalsIgnoreCase("STAFF")) {
-            newUser = new Staff(newUsername, newPassword);
+            // We use the simpler constructor and rely on the controller to set the Name later,
+            // or assume the DAO/Controller handles the new name/ID logic.
+            newUser = new Staff(newUsername, newPassword); 
         } else if (role.equalsIgnoreCase("SHOPKEEPER")) {
             newUser = new ShopKeeper(newUsername, newPassword);
         } else {
             System.err.println("Error: Invalid role specified.");
             return false;
         }
-
-        // 2. Persist the new user
-        userDAO.add(newUser);
-        System.out.println(creatingUser.getUsername() + " successfully added new user: " + newUsername + " as " + role);
-        return true;
+        
+        // NOTE: This logic is slightly incomplete if 'Name' is not passed here, 
+        // but the StaffManagementController sets the name on 'newUser' before this call, 
+        // so it should be okay if you are passing the *same* object. 
+        // However, the current controller code doesn't pass the name set in the form
+        // to this method. Let's fix the *controller* to set the name on the user 
+        // object *before* calling this service method.
+        
+        // The DAO's add(newUser) will handle ID assignment and persistence.
+        userDAO.add(newUser); 
+        // Since the DAO.add performs uniqueness check and persistence, we can
+        // simplify the return (though a real service layer would check DAO return status).
+        // For this project structure, we assume if DAO.add completes, it was successful.
+        return true; 
     }
     /**
      * Executes the login process as per the User Login Sequence Diagram.

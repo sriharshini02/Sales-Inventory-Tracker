@@ -17,7 +17,7 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.tracker.ui.SalesController">
    
-   <Label text="Sales Register (Staff &amp; ShopKeeper)">
+   <Label text="Sales Register">
       <font>
          <Font name="System Bold" size="20.0" />
       </font>

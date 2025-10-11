@@ -21,37 +21,39 @@ public class MainController {
     @FXML private Button salesHistoryBtn;
     @FXML private Button reportsBtn;
     @FXML private Label shopKeeperHeader;
+    @FXML private Button staffManagementBtn; // <--- NEW FXML ID
 
     private User activeUser;
 
     @FXML
     public void initialize() {
-        // Called after FXML elements are loaded
-
-        // 1. Get the current active user from the service (Session)
         activeUser = AuthenticationService.getActiveUser();
 
         if (activeUser == null) {
-            // Should not happen if login worked, but handle defensively
             userLabel.setText("User: UNAUTHORIZED");
             return;
         }
 
-        userLabel.setText("User: " + activeUser.getUsername() + " (" + activeUser.getRole() + ")");
+        userLabel.setText("User: " + activeUser.getName() + " (" + activeUser.getRole() + ")"); // Use getName() if available
 
         // 2. Implement Role-Based Access Control (RBAC)
-        if (!AuthenticationService.isActiveUserShopKeeper()) {
-            // Hide ShopKeeper specific tools for Staff users
-            productManagementBtn.setManaged(false);
-            productManagementBtn.setVisible(false);
-            recordPurchaseBtn.setManaged(false);
-            recordPurchaseBtn.setVisible(false);
-            salesHistoryBtn.setManaged(false);
-            salesHistoryBtn.setVisible(false);
-            reportsBtn.setManaged(false);
-            reportsBtn.setVisible(false);
-            shopKeeperHeader.setManaged(false);
-            shopKeeperHeader.setVisible(false);
+        boolean isShopKeeper = AuthenticationService.isActiveUserShopKeeper();
+
+        // List of all ShopKeeper controls (including the new one)
+        Button[] shopKeeperButtons = {
+            productManagementBtn, recordPurchaseBtn, salesHistoryBtn, reportsBtn, staffManagementBtn // <--- NEW BUTTON
+        };
+
+        for (Button btn : shopKeeperButtons) {
+            if (btn != null) { // Check for null in case FXML loading failed partially
+                btn.setManaged(isShopKeeper);
+                btn.setVisible(isShopKeeper);
+            }
+        }
+
+        if (shopKeeperHeader != null) {
+            shopKeeperHeader.setManaged(isShopKeeper);
+            shopKeeperHeader.setVisible(isShopKeeper);
         }
         
         // Show default view (Inventory) upon load
@@ -60,14 +62,14 @@ public class MainController {
 
     private void loadView(String fxmlPath) {
         try {
-            // Clear content and load new view
             contentArea.getChildren().clear();
             Node view = FXMLLoader.load(getClass().getResource(fxmlPath));
+            VBox.setVgrow(view, javafx.scene.layout.Priority.ALWAYS); // Ensure content scales
             contentArea.getChildren().add(view);
         } catch (IOException e) {
             System.err.println("Failed to load view: " + fxmlPath);
             e.printStackTrace();
-            contentArea.getChildren().add(new Label("Error loading view."));
+            contentArea.getChildren().add(new Label("Error loading view: " + e.getMessage()));
         }
     }
 
@@ -75,40 +77,42 @@ public class MainController {
 
     @FXML
     public void showInventoryView() {
-        // Implements View Current Stock Use Case (available to both roles)
         loadView("/com/tracker/ui/InventoryView.fxml");
     }
 
     @FXML
     public void showSalesRegisterView() {
-        // Implements Record Sale Use Case (available to both roles)
         loadView("/com/tracker/ui/SalesRegisterView.fxml");
     }
 
     @FXML
     public void showProductManagementView() {
-        // Implements Add/Edit/Remove Product Use Cases (ShopKeeper only)
         loadView("/com/tracker/ui/ProductManagementView.fxml");
     }
     
     @FXML
     public void showPurchaseView() {
-        // Implements Record Purchase Use Case (ShopKeeper only)
         loadView("/com/tracker/ui/PurchaseView.fxml");
     }
     
     @FXML
     public void showSalesHistoryView() {
-        // Implements View Sales History Use Case (ShopKeeper only)
         loadView("/com/tracker/ui/SalesHistoryView.fxml");
     }
 
     @FXML
     public void showReportsView() {
-        // Implements Generate Reports Use Case (ShopKeeper only)
         loadView("/com/tracker/ui/ReportsView.fxml");
     }
     
+    /**
+     * Handler for the new "Manage Staff" button.
+     */
+    @FXML
+    public void showStaffManagementView() {
+        loadView("/com/tracker/ui/StaffManagementView.fxml");
+    }
+
     @FXML
     public void handleLogout() throws IOException {
         AuthenticationService authService = new AuthenticationService();

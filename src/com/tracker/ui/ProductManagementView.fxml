@@ -37,7 +37,7 @@
             <Label text="Selling Price:" GridPane.rowIndex="4" />
             <TextField fx:id="sellingPriceField" promptText="0.00" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             
-            <Label text="Initial Stock:" GridPane.rowIndex="5" />
+            <Label text="Stock to Add:" GridPane.rowIndex="5" />
             <TextField fx:id="stockField" promptText="Only used for new products" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </GridPane>
          

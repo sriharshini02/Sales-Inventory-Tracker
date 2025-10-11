@@ -10,7 +10,9 @@ public class ShopKeeper extends User {
     public ShopKeeper(String username, String password) {
         super(username, password);
     }
-
+    public ShopKeeper(int id, String username, String password, String name) {
+        super(id, username, password, name);
+    }
     @Override
     public String getRole() {
         return "SHOPKEEPER";

@@ -10,7 +10,9 @@ public class Staff extends User {
     public Staff(String username, String password) {
         super(username, password);
     }
-
+    public Staff(int id, String username, String password, String name) {
+        super(id, username, password, name);
+    }
     @Override
     public String getRole() {
         return "STAFF";

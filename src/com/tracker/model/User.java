@@ -9,15 +9,32 @@ import java.io.Serializable;
 public abstract class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    // Attributes from Class Diagram
+    private int id; 
+    private String name; 
     private String username;
     private String password; // Stored here for simplified local authentication
 
     public User(String username, String password) {
+        this(0, username, password, null);
+    }
+    
+    /**
+     * Full Constructor for loading users from persistence (UserDAO).
+     */
+    public User(int id, String username, String password, String name) {
+        this.id = id;
         this.username = username;
         this.password = password;
+        this.name = name; // Name can be null initially, but should be set for CRUD
     }
-
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    
+    public String getName() { 
+        // Provide a default if name is null (e.g., during old bootstrap)
+        return name != null ? name : username; 
+    }
+    public void setName(String name) { this.name = name; }
     // Getters 
     public String getUsername() { return username; }
     public String getPassword() { return password; }
