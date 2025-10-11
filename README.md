@@ -51,6 +51,8 @@ This project also serves as a demonstration of full-stack desktop application de
 
 > Users are encouraged to change the default credentials for security purposes.
 
+---
+
 ## Future Improvements
 
 - Multi-user support with roles and permissions  
@@ -59,7 +61,4 @@ This project also serves as a demonstration of full-stack desktop application de
 - Integration with barcode scanners for faster inventory updates  
 
 
-
-
-After installation, the application directory will typically include:
 
